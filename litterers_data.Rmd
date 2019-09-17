@@ -15,6 +15,14 @@ library(tidyverse)
 ## Reads in a dataset
 ## Absolute path and relative path - prefer relative path
 wrang_df <- read_csv(file = "data_import_examples/FAS_litters.csv")
-wrang_df <- janitor::clean_names(wrang_df) # cleaning names 
+wrang_df <- janitor::clean_names(wrang_df) # cleaning names and 
+# also use janitor::.. only if the package has not been loaded.
+```
+
+
+```{r}
+# loading in the pups data
+pups_df <- read_csv("data_import_examples/FAS_pups.csv")
+pups_df <- janitor::clean_names(pups_df) # dont view dataset in rmarkdown
 ```
 
