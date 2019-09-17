@@ -1,0 +1,20 @@
+---
+title: "data_import"
+author: "Clement Mugenzi"
+date: "9/17/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+# Loading the dataset
+
+```{r}
+## Reads in a dataset
+## Absolute path and relative path - prefer relative path
+wrang_df <- read_csv(file = "data_import_examples/FAS_litters.csv")
+wrang_df <- janitor::clean_names(wrang_df) # cleaning names 
+```
+
