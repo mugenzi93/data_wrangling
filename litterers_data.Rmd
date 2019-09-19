@@ -32,7 +32,7 @@ wrang_df <- read_csv(file = "data_import_examples/FAS_litters.csv",
 wrang_df <- janitor::clean_names(wrang_df) # cleaning names and 
 # also use janitor::.. only if the package has not been loaded.
 
-
+wrang_df = janitor::clean_names(wrang_df)
 ```
 
 
@@ -61,5 +61,28 @@ view(mlb11_data)
 pulse_data = read_sas("data_import_examples/public_pulse_data.sas7bdat")
 view(pulse_data)
 # So why read_csv and not read.csv? Because read_csv imports datasets as a tibble, not a dataframe whereas read.csv imports data as dataframes.
+```
+
+
+# Data Manipulation
+
+
+```{r}
+select(wrang_df, group, litter_number)
+select(wrang_df, group, litter_number, gd0_weight)
+select(wrang_df, group, litter_number, gd0_weight, starts_with("pups"))
+select(wrang_df, litter_number, group, gd0_weight)
+select(wrang_df, litter_number, group, everything())
+select(wrang_df, litter_number, -group)
+select(wrang_df, litter_number, gd0_weight:pups_born_alive) # define the new dataframe by calling it another name.
+select(wrang_df, GROUP = group, litter_number) # rename a variable through select function.
+rename(wrang_df, GROUP = group, litter.number = litter_number)
+```
+
+
+## Filtering
+
+```{r}
+
 ```
 
