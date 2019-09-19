@@ -97,7 +97,23 @@ drop_na(wrang_df, gd0_weight, gd18_weight) # Getting rid of missing values
 
 ```
 
+## Mutate
 
+```{r}
+mutate(wrang_df, wt_gain = gd18_weight - gd0_weight,
+       group = str_to_lower(group))
+```
+
+## Arrange (same as sort)
+
+```{r}
+arrange(wrang_df, pups_born_alive)
+
+arrange(wrang_df, desc(pups_born_alive))
+
+arrange(wrang_df, pups_born_alive, gd0_weight) # goes in a hierarchy order.
+
+```
 
 
 
