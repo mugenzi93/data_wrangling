@@ -116,7 +116,30 @@ arrange(wrang_df, pups_born_alive, gd0_weight) # goes in a hierarchy order.
 ```
 
 
+## Pipe
 
+let us create a collection of commands...
+
+```{r}
+wrang_df = 
+  read_csv("data_manipulation_examples/FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>%
+  drop_na(gd0_weight)
+wrang_df
+```
+
+
+```{r}
+wrang_df = 
+  read_csv("data_manipulation_examples/FAS_litters.csv") %>%
+  janitor::clean_names(dat = .) %>%
+  select(.data = ., -pups_survive)
+wrang_df
+```
 
 
 

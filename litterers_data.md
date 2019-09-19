@@ -489,3 +489,88 @@ arrange(wrang_df, pups_born_alive, gd0_weight) # goes in a hierarchy order.
     ## 10 Low7  #112                23.9        40.5          19               6
     ## # … with 39 more rows, and 2 more variables: pups_dead_birth <int>,
     ## #   pups_survive <int>
+
+## Pipe
+
+let us create a collection of commands…
+
+``` r
+wrang_df = 
+  read_csv("data_manipulation_examples/FAS_litters.csv") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group)) %>%
+  drop_na(gd0_weight)
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   Group = col_character(),
+    ##   `Litter Number` = col_character(),
+    ##   `GD0 weight` = col_double(),
+    ##   `GD18 weight` = col_double(),
+    ##   `GD of Birth` = col_double(),
+    ##   `Pups born alive` = col_double(),
+    ##   `Pups dead @ birth` = col_double(),
+    ##   `Pups survive` = col_double()
+    ## )
+
+``` r
+wrang_df
+```
+
+    ## # A tibble: 34 x 8
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>              <dbl>       <dbl>       <dbl>           <dbl>
+    ##  1 con7  #85                 19.7        34.7          20               3
+    ##  2 con7  #1/2/95/2           27          42            19               8
+    ##  3 con7  #5/5/3/83/3-3       26          41.4          19               6
+    ##  4 con7  #5/4/2/95/2         28.5        44.1          19               5
+    ##  5 con8  #3/5/2/2/95         28.5        NA            20               8
+    ##  6 con8  #5/4/3/83/3         28          NA            19               9
+    ##  7 mod7  #59                 17          33.4          19               8
+    ##  8 mod7  #103                21.4        42.1          19               9
+    ##  9 mod7  #3/82/3-2           28          45.9          20               5
+    ## 10 mod7  #4/2/95/2           23.5        NA            19               9
+    ## # … with 24 more rows, and 2 more variables: pups_dead_birth <dbl>,
+    ## #   wt_gain <dbl>
+
+``` r
+wrang_df = 
+  read_csv("data_manipulation_examples/FAS_litters.csv") %>%
+  janitor::clean_names(dat = .) %>%
+  select(.data = ., -pups_survive)
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   Group = col_character(),
+    ##   `Litter Number` = col_character(),
+    ##   `GD0 weight` = col_double(),
+    ##   `GD18 weight` = col_double(),
+    ##   `GD of Birth` = col_double(),
+    ##   `Pups born alive` = col_double(),
+    ##   `Pups dead @ birth` = col_double(),
+    ##   `Pups survive` = col_double()
+    ## )
+
+``` r
+wrang_df
+```
+
+    ## # A tibble: 49 x 7
+    ##    group litter_number gd0_weight gd18_weight gd_of_birth pups_born_alive
+    ##    <chr> <chr>              <dbl>       <dbl>       <dbl>           <dbl>
+    ##  1 Con7  #85                 19.7        34.7          20               3
+    ##  2 Con7  #1/2/95/2           27          42            19               8
+    ##  3 Con7  #5/5/3/83/3-3       26          41.4          19               6
+    ##  4 Con7  #5/4/2/95/2         28.5        44.1          19               5
+    ##  5 Con7  #4/2/95/3-3         NA          NA            20               6
+    ##  6 Con7  #2/2/95/3-2         NA          NA            20               6
+    ##  7 Con7  #1/5/3/83/3-…       NA          NA            20               9
+    ##  8 Con8  #3/83/3-3           NA          NA            20               9
+    ##  9 Con8  #2/95/3             NA          NA            20               8
+    ## 10 Con8  #3/5/2/2/95         28.5        NA            20               8
+    ## # … with 39 more rows, and 1 more variable: pups_dead_birth <dbl>
