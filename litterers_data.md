@@ -671,3 +671,48 @@ lotr_data =
   ) %>% 
   select(movie, race, sex, words)
 ```
+
+## Joining datasets
+
+``` r
+pup_data = 
+  read_csv("data_Tidy_examples /FAS_pups.csv", col_types = "ciiiii") %>%
+  janitor::clean_names() %>%
+  mutate(sex = recode(sex, `1` = "male", `2` = "female")) 
+
+litter_data = 
+  read_csv("data_Tidy_examples /FAS_litters.csv", col_types = "ccddiiii") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group))
+
+fas_data = 
+  left_join(pup_data, litter_data, by = "litter_number")
+fas_data
+```
+
+    ## # A tibble: 313 x 13
+    ##    litter_number sex   pd_ears pd_eyes pd_pivot pd_walk group gd0_weight
+    ##    <chr>         <chr>   <int>   <int>    <int>   <int> <chr>      <dbl>
+    ##  1 #85           male        4      13        7      11 con7        19.7
+    ##  2 #85           male        4      13        7      12 con7        19.7
+    ##  3 #1/2/95/2     male        5      13        7       9 con7        27  
+    ##  4 #1/2/95/2     male        5      13        8      10 con7        27  
+    ##  5 #5/5/3/83/3-3 male        5      13        8      10 con7        26  
+    ##  6 #5/5/3/83/3-3 male        5      14        6       9 con7        26  
+    ##  7 #5/4/2/95/2   male       NA      14        5       9 con7        28.5
+    ##  8 #4/2/95/3-3   male        4      13        6       8 con7        NA  
+    ##  9 #4/2/95/3-3   male        4      13        7       9 con7        NA  
+    ## 10 #2/2/95/3-2   male        4      NA        8      10 con7        NA  
+    ## # … with 303 more rows, and 5 more variables: gd18_weight <dbl>,
+    ## #   gd_of_birth <int>, pups_born_alive <int>, pups_dead_birth <int>,
+    ## #   wt_gain <dbl>
+
+``` r
+# Try to join these
+
+fas_data = 
+  left_join(pup_data, litter_data, by = "litter_number")
+```

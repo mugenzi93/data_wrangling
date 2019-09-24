@@ -223,6 +223,31 @@ lotr_data =
   select(movie, race, sex, words)
 ```
 
+## Joining datasets
+
+```{r}
+pup_data = 
+  read_csv("data_Tidy_examples /FAS_pups.csv", col_types = "ciiiii") %>%
+  janitor::clean_names() %>%
+  mutate(sex = recode(sex, `1` = "male", `2` = "female")) 
+
+litter_data = 
+  read_csv("data_Tidy_examples /FAS_litters.csv", col_types = "ccddiiii") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = str_to_lower(group))
+
+fas_data = 
+  left_join(pup_data, litter_data, by = "litter_number")
+fas_data
+
+# Try to join these
+
+fas_data = 
+  left_join(pup_data, litter_data, by = "litter_number")
+```
 
 
 
