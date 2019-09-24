@@ -645,3 +645,29 @@ pivot_wider(
     ##   <chr>     <dbl> <dbl>
     ## 1 treatment   4       8
     ## 2 placebo     3.5     4
+
+## Binding Rows
+
+``` r
+fellowship_ring = 
+  readxl::read_excel("data_Tidy_examples /LotR_Words.xlsx", range = "B3:D6") %>% 
+  mutate(movie = "fellowship")
+
+two_towers = 
+  readxl::read_excel("data_Tidy_examples /LotR_Words.xlsx", range = "F3:H6") %>%
+  mutate(movie = "two_towers")
+
+return_king = 
+  readxl::read_excel("data_Tidy_examples /LotR_Words.xlsx", range = "J3:L6") %>%
+  mutate(movie = "return_king")
+
+lotr_data = 
+  bind_rows(fellowship_ring, two_towers, return_king) %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    female:male,
+    names_to = "sex",
+    values_to = "words"
+  ) %>% 
+  select(movie, race, sex, words)
+```
