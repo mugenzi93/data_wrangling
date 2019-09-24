@@ -578,3 +578,36 @@ wrang_df
 ``` r
 # Do not worry about this right now.
 ```
+
+# Tidying Data
+
+## Wide to long
+
+``` r
+library(tidyr)
+pulse_data = 
+  haven::read_sas("data_Tidy_examples /public_pulse_data.sas7bdat") %>%
+  janitor::clean_names()
+
+pivot_longer(
+  pulse_data,
+  bdi_score_bl:bdi_score_12m,
+  names_to = "visit",
+  values_to = "bdi"
+)
+```
+
+    ## # A tibble: 4,348 x 5
+    ##       id   age sex   visit           bdi
+    ##    <dbl> <dbl> <chr> <chr>         <dbl>
+    ##  1 10003  48.0 male  bdi_score_bl      7
+    ##  2 10003  48.0 male  bdi_score_01m     1
+    ##  3 10003  48.0 male  bdi_score_06m     2
+    ##  4 10003  48.0 male  bdi_score_12m     0
+    ##  5 10015  72.5 male  bdi_score_bl      6
+    ##  6 10015  72.5 male  bdi_score_01m    NA
+    ##  7 10015  72.5 male  bdi_score_06m    NA
+    ##  8 10015  72.5 male  bdi_score_12m    NA
+    ##  9 10022  58.5 male  bdi_score_bl     14
+    ## 10 10022  58.5 male  bdi_score_01m     3
+    ## # … with 4,338 more rows

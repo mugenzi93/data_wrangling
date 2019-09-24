@@ -144,6 +144,24 @@ wrang_df
 
 
 
+# Tidying Data
+
+## Wide to long
+
+```{r}
+library(tidyr)
+pulse_data = 
+  haven::read_sas("data_Tidy_examples /public_pulse_data.sas7bdat") %>%
+  janitor::clean_names()
+
+pivot_longer(
+  pulse_data,
+  bdi_score_bl:bdi_score_12m,
+  names_to = "visit",
+  values_to = "bdi"
+)
+
+```
 
 
 
