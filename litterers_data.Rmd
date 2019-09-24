@@ -152,23 +152,48 @@ wrang_df
 library(tidyr)
 pulse_data = 
   haven::read_sas("data_Tidy_examples /public_pulse_data.sas7bdat") %>%
-  janitor::clean_names()
-
-pivot_longer(
-  pulse_data,
-  bdi_score_bl:bdi_score_12m,
-  names_to = "visit",
-  values_to = "bdi"
-)
+  janitor::clean_names() %>%
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) %>% 
+  mutate(
+    visit = recode(visit, "bl" = "00m")
+  )
+  
 
 ```
 
 
+## Separate in litters
+
+```{r}
+wrang_df = 
+  read_csv("data_Tidy_examples /FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(col = group, into = c("dose", "day_of_tx"), 3)
+view(wrang_df)
+```
 
 
+## Using pivot_wider
 
 
-
+```{r}
+analysis_result = tibble(
+  group = c("treatment", "treatment", "placebo", "placebo"),
+  time = c("pre", "post", "pre", "post"),
+  mean = c(4, 8, 3.5, 4)
+)
+# longer to wider
+pivot_wider(
+  analysis_result,
+  names_from = time,
+  values_from = mean,
+)
+```
 
 
 

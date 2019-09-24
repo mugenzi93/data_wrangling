@@ -587,27 +587,61 @@ wrang_df
 library(tidyr)
 pulse_data = 
   haven::read_sas("data_Tidy_examples /public_pulse_data.sas7bdat") %>%
-  janitor::clean_names()
+  janitor::clean_names() %>%
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) %>% 
+  mutate(
+    visit = recode(visit, "bl" = "00m")
+  )
+```
 
-pivot_longer(
-  pulse_data,
-  bdi_score_bl:bdi_score_12m,
-  names_to = "visit",
-  values_to = "bdi"
+## Separate in litters
+
+``` r
+wrang_df = 
+  read_csv("data_Tidy_examples /FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(col = group, into = c("dose", "day_of_tx"), 3)
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   Group = col_character(),
+    ##   `Litter Number` = col_character(),
+    ##   `GD0 weight` = col_double(),
+    ##   `GD18 weight` = col_double(),
+    ##   `GD of Birth` = col_double(),
+    ##   `Pups born alive` = col_double(),
+    ##   `Pups dead @ birth` = col_double(),
+    ##   `Pups survive` = col_double()
+    ## )
+
+``` r
+view(wrang_df)
+```
+
+## Using pivot\_wider
+
+``` r
+analysis_result = tibble(
+  group = c("treatment", "treatment", "placebo", "placebo"),
+  time = c("pre", "post", "pre", "post"),
+  mean = c(4, 8, 3.5, 4)
+)
+# longer to wider
+pivot_wider(
+  analysis_result,
+  names_from = time,
+  values_from = mean,
 )
 ```
 
-    ## # A tibble: 4,348 x 5
-    ##       id   age sex   visit           bdi
-    ##    <dbl> <dbl> <chr> <chr>         <dbl>
-    ##  1 10003  48.0 male  bdi_score_bl      7
-    ##  2 10003  48.0 male  bdi_score_01m     1
-    ##  3 10003  48.0 male  bdi_score_06m     2
-    ##  4 10003  48.0 male  bdi_score_12m     0
-    ##  5 10015  72.5 male  bdi_score_bl      6
-    ##  6 10015  72.5 male  bdi_score_01m    NA
-    ##  7 10015  72.5 male  bdi_score_06m    NA
-    ##  8 10015  72.5 male  bdi_score_12m    NA
-    ##  9 10022  58.5 male  bdi_score_bl     14
-    ## 10 10022  58.5 male  bdi_score_01m     3
-    ## # … with 4,338 more rows
+    ## # A tibble: 2 x 3
+    ##   group       pre  post
+    ##   <chr>     <dbl> <dbl>
+    ## 1 treatment   4       8
+    ## 2 placebo     3.5     4
